@@ -68,7 +68,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
       rollupOptions: {
         // 静态资源分类打包
         output: {
-          chunkFileNames: "static/js/[name]-[hash].js"
+          chunkFileNames: "js/[name]-[hash].js"
           // entryFileNames: "static/js/[name]-[hash].js",
           // assetFileNames: "static/[ext]/[name]-[hash].[ext]"
         }
