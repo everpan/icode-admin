@@ -1,13 +1,11 @@
-import App from "../../App.vue";
-import router from "@/router";
-import { setupStore } from "@/store";
 import { useI18n } from "@/plugins/i18n";
 import { getPlatformConfig } from "@/config";
 import { MotionPlugin } from "@vueuse/motion";
 // import { useEcharts } from "@/plugins/echarts";
-import { createApp, type Directive } from "vue";
+import type { Directive } from "vue";
 import { useElementPlus } from "@/plugins/elementPlus";
 import { injectResponsiveStorage } from "@/utils/responsive";
+import { iCode } from "./icode";
 
 import Table from "@pureadmin/table";
 // import PureDescriptions from "@pureadmin/descriptions";
@@ -23,7 +21,7 @@ import "element-plus/dist/index.css";
 import "@/assets/iconfont/iconfont.js";
 import "@/assets/iconfont/iconfont.css";
 
-const app = createApp(App);
+const { app, store, router } = iCode;
 
 // 自定义指令
 import * as directives from "@/directives";
@@ -53,7 +51,7 @@ app.use(VueTippy);
 
 export function appMount(rootContainer: string) {
   getPlatformConfig(app).then(async config => {
-    setupStore(app);
+    app.use(store);
     app.use(router);
     await router.isReady();
     injectResponsiveStorage(app, config);
@@ -61,5 +59,6 @@ export function appMount(rootContainer: string) {
     // .use(PureDescriptions)
     // .use(useEcharts);
     app.mount(rootContainer);
+    window.iCode = iCode;
   });
 }
