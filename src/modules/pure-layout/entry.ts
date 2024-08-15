@@ -6,7 +6,6 @@ const route = {
   name: "Home",
   component: PureLayout,
   redirect: "/welcome",
-  type: "layout",
   meta: {
     icon: "ep:home-filled",
     title: $t("menus.pureHome"),
@@ -17,6 +16,7 @@ const route = {
 export default {
   name: "pure-layout",
   version: "0.1.0",
+  type: "layout",
   describtion: "icode-admin 默认布局，继承自pure admin",
   routes: [route],
   sysRoutes: []
