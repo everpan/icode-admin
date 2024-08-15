@@ -32,18 +32,18 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
 
   let libFileName = `src/modules/${moduleName}/entry.ts`;
   let moduleVersion = fetchVersionFromEntry(libFileName);
-  let dist = `dist/frontend/${moduleName}-${moduleVersion}`;
+  let base = `frontend/${moduleName}-${moduleVersion}`;
+  let dist = `dist/${base}`;
   console.log("entry:" + libFileName);
   console.log("dist:" + dist);
   // process.argv = args.slice(0, 5);
 
-  const { VITE_CDN, VITE_COMPRESSION, VITE_PUBLIC_PATH } = wrapperEnv(
-    loadEnv(mode, root)
-  );
+  const { VITE_CDN, VITE_COMPRESSION } = wrapperEnv(loadEnv(mode, root));
 
   return {
-    base: VITE_PUBLIC_PATH,
-    root,
+    // base: VITE_PUBLIC_PATH + "./",
+    base,
+    // root,
     resolve: {
       alias
     },
@@ -68,15 +68,16 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
       rollupOptions: {
         // 静态资源分类打包
         output: {
-          chunkFileNames: "static/js/[name]-[hash].js",
+          chunkFileNames: "static/js/[name]-[hash].js"
           // entryFileNames: "static/js/[name]-[hash].js",
-          assetFileNames: "static/[ext]/[name]-[hash].[ext]"
+          // assetFileNames: "static/[ext]/[name]-[hash].[ext]"
         }
       }
     },
     define: {
       __INTLIFY_PROD_DEVTOOLS__: false,
-      __APP_INFO__: JSON.stringify(__APP_INFO__)
+      __APP_INFO__: JSON.stringify(__APP_INFO__),
+      "process.env.NODE_ENV": JSON.stringify("production")
     }
   };
 };
