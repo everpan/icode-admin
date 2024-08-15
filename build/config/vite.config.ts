@@ -12,8 +12,7 @@ function fetchVersionFromEntry(file: string): string {
     let end = context.indexOf("\n", pos);
     if (end > 0) {
       let ver = context.substring(pos + 8, end);
-      ver = ver.replaceAll('"', "");
-      ver = ver.replaceAll(" ", "");
+      ver = ver.replaceAll(/[ \"\,\r]/g, "");
       return ver;
     }
   }
@@ -33,8 +32,9 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
 
   let libFileName = `src/modules/${moduleName}/entry.ts`;
   let moduleVersion = fetchVersionFromEntry(libFileName);
-
-  console.log("lib file:" + libFileName);
+  let dist = `dist/frontend/${moduleName}-${moduleVersion}`;
+  console.log("entry:" + libFileName);
+  console.log("dist:" + dist);
   // process.argv = args.slice(0, 5);
 
   const { VITE_CDN, VITE_COMPRESSION, VITE_PUBLIC_PATH } = wrapperEnv(
@@ -64,7 +64,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
         name: moduleName,
         fileName: moduleName
       },
-      outDir: `dist/${moduleName}-${moduleVersion}`,
+      outDir: dist,
       rollupOptions: {
         // 静态资源分类打包
         output: {
