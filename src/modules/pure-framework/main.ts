@@ -5,7 +5,7 @@ import { MotionPlugin } from "@vueuse/motion";
 import type { Directive } from "vue";
 import { useElementPlus } from "@/plugins/elementPlus";
 import { injectResponsiveStorage } from "@/utils/responsive";
-import { iCode } from "./icode";
+import { iCode } from "../icode-core/icode";
 
 import Table from "@pureadmin/table";
 // import PureDescriptions from "@pureadmin/descriptions";

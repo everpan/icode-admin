@@ -19,7 +19,8 @@
     "resolveJsonModule": true,
     "lib": [
       "ESNext",
-      "DOM"
+      "DOM",
+      "ES2021"
     ],
     "paths": {
       "@/*": [

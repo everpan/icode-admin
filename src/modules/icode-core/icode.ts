@@ -1,6 +1,6 @@
 /**
  * 以vue3为主的框架
- * 这里创建公用的实例
+ * 这里创建公用的构件实例
  */
 import { createApp } from "vue";
 import App from "../../App.vue";
@@ -17,4 +17,5 @@ const router = myCreateRouter(
   getHistoryMode(import.meta.env.VITE_ROUTER_HISTORY),
   []
 );
-export const iCode = { app, store, router };
+const insts: Record<string, any> = {};
+export const iCode = { app, store, router, insts };

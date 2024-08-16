@@ -42,7 +42,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
 
   return {
     // base: VITE_PUBLIC_PATH + "./",
-    base,
+    base: "./",
     // root,
     resolve: {
       alias
