@@ -13,18 +13,13 @@ import {
   getTopMenu,
   initRouter,
   isOneOfArray,
-  getHistoryMode,
   findRouteByPath,
   handleAliveRoute,
   formatTwoStageRoutes,
   formatFlatteningRoutes
 } from "./utils";
-import {
-  type Router,
-  createRouter,
-  type RouteRecordRaw,
-  type RouteComponent
-} from "vue-router";
+import type { Router, RouteRecordRaw, RouteComponent } from "vue-router";
+import { router } from "./create";
 import {
   type DataInfo,
   userKey,
@@ -44,20 +39,22 @@ const modules: Record<string, any> = import.meta.glob(
 );
 
 /** 原始静态路由（未做任何处理） */
-const routes = [];
+const routes_tmp = [];
 
 Object.keys(modules).forEach(key => {
-  routes.push(modules[key].default);
+  routes_tmp.push(modules[key].default);
 });
 
 /** 导出处理后的静态路由（三级及以上的路由全部拍成二级） */
 export const constantRoutes: Array<RouteRecordRaw> = formatTwoStageRoutes(
-  formatFlatteningRoutes(buildHierarchyTree(ascending(routes.flat(Infinity))))
+  formatFlatteningRoutes(
+    buildHierarchyTree(ascending(routes_tmp.flat(Infinity)))
+  )
 );
 
 /** 用于渲染菜单，保持原始层级 */
 export const constantMenus: Array<RouteComponent> = ascending(
-  routes.flat(Infinity)
+  routes_tmp.flat(Infinity)
 ).concat(...remainingRouter);
 
 /** 不参与菜单的路由 */
@@ -65,25 +62,7 @@ export const remainingPaths = Object.keys(remainingRouter).map(v => {
   return remainingRouter[v].path;
 });
 
-/** 创建路由实例 */
-export const router: Router = createRouter({
-  history: getHistoryMode(import.meta.env.VITE_ROUTER_HISTORY),
-  routes: constantRoutes.concat(...(remainingRouter as any)),
-  strict: true,
-  scrollBehavior(to, from, savedPosition) {
-    return new Promise(resolve => {
-      if (savedPosition) {
-        return savedPosition;
-      } else {
-        if (from.meta.saveSrollTop) {
-          const top: number =
-            document.documentElement.scrollTop || document.body.scrollTop;
-          resolve({ left: 0, top });
-        }
-      }
-    });
-  }
-});
+export const routes = constantRoutes.concat(...(remainingRouter as any));
 
 /** 重置路由 */
 export function resetRouter() {

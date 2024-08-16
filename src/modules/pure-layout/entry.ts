@@ -1,23 +1,12 @@
 import PureLayout from "@/layout/index.vue";
-import { $t } from "@/plugins/i18n";
-
-const route = {
-  path: "/",
-  name: "Home",
-  component: PureLayout,
-  redirect: "/welcome",
-  meta: {
-    icon: "ep:home-filled",
-    title: $t("menus.pureHome"),
-    rank: 0
-  }
-} as RouteConfigsTable;
+import routes from "./routes";
 
 export default {
   name: "pure-layout",
   version: "0.1.0",
   type: "layout",
+  component: PureLayout,
   describtion: "icode-admin 默认布局，继承自pure admin",
-  routes: [route],
+  routes,
   sysRoutes: []
 };
