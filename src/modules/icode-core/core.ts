@@ -1,14 +1,22 @@
 import { iCode } from "./icode";
 
-export function iCodeImport(base: string, module: string, version: string) {
+export function Import(base: string, module: string, version: string) {
   let src = `${base}/${module}-${version}/${module}.js`;
   import(src).then(inst => {
-    iCodeInstCache(iCode.insts, module, version, inst.default);
+    instCache(iCode.insts, module, version, inst.default);
   });
-  // iCode.iCodeInstCache(iCode,"${module}","${version}",inst);
 }
 
-export function iCodeImport0(base: string, module: string, version: string) {
+export function loadCSS(base: string, module: string, version: string) {
+  let href = `${base}/${module}-${version}/style.css`;
+  let link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = href;
+  let head = document.getElementsByTagName("head")[0];
+  head.appendChild(link);
+}
+
+export function Import0(base: string, module: string, version: string) {
   let src = `${base}/${module}-${version}/${module}.js`;
   let scElem = document.createElement("script");
   scElem.type = "module";
@@ -24,7 +32,7 @@ export function iCodeImport0(base: string, module: string, version: string) {
   head.appendChild(scElem);
 }
 
-export function iCodeInstCache(
+export function instCache(
   insts: any,
   module: string,
   version: string,

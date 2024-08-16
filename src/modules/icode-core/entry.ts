@@ -1,4 +1,4 @@
-import { iCodeImport, iCodeInstCache } from "./core";
+import { Import, loadCSS, instCache } from "./core";
 import { iCode } from "./icode";
 
 export default {
@@ -8,7 +8,8 @@ export default {
   type: "tools",
   iCode: {
     ...iCode,
-    import: iCodeImport,
-    iCodeInstCache
+    import: Import,
+    loadCSS,
+    instCache
   }
 };

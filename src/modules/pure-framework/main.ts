@@ -59,6 +59,6 @@ export function appMount(rootContainer: string) {
     // .use(PureDescriptions)
     // .use(useEcharts);
     app.mount(rootContainer);
-    window.iCode = iCode;
+    // window.iCode = iCode;
   });
 }
