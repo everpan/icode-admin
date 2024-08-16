@@ -1,4 +1,3 @@
-import { $t } from "@/plugins/i18n";
 import { appMount } from "./main";
 
 export default {
@@ -9,7 +8,11 @@ export default {
   sysRoutes: [],
   type: "framework",
   config: {
-    appMount,
-    title: "iCode Admin" + $t("menus.pureHome")
+    rootContain: "#app"
+  },
+  async init(_store, _router, conf: any) {
+    console.log("init", _store, _router, conf);
+    appMount(conf.rootContain);
+    conf.rootContain = "loaded";
   }
 };

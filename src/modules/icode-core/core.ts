@@ -9,10 +9,11 @@ import axios from "axios";
 
 export function importModule(
   base: string,
-  opt: { name: string; version: string; style: boolean | string | null }
+  opt: { name: string; version: string; style: boolean | string | null },
+  cb: any
 ) {
   let path = genModulePath(base, opt.name, opt.version);
-  Import(path, opt.name, opt.version);
+  Import(path, opt.name, opt.version, cb);
   if (opt.style) {
     loadCSS(path);
   }
@@ -21,9 +22,14 @@ export function importModule(
 function loadGlobalConfigCallback(config: any) {
   let modules = config.modules;
   let coreConfig = config.iCodeCore;
+  let instanceInitCallback = inst => {
+    if (inst.init) {
+      inst.init(iCode.store, iCode.router, inst.config);
+    }
+  };
   if (modules) {
-    modules.forEach(m => {
-      importModule(coreConfig.rootPath, m);
+    modules.forEach(module => {
+      importModule(coreConfig.rootPath, module, instanceInitCallback);
     });
   } else {
     throw "配置中未发现`modules`配置项目";
@@ -56,10 +62,13 @@ function genModulePath(base: string, module: string, version: string): string {
   return `${base}/${module}-${version}`;
 }
 
-function Import(path: string, module: string, version: string) {
+function Import(path: string, module: string, version: string, cb: any) {
   let src = `${path}/${module}.js`;
   import(src).then(inst => {
     instCache(iCode.insts, module, version, inst.default);
+    if (cb) {
+      cb(inst.default);
+    }
   });
 }
 
