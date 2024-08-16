@@ -2,7 +2,6 @@ import { iCode } from "./icode";
 
 export function iCodeImport(base: string, module: string, version: string) {
   let src = `${base}/${module}-${version}/${module}.js`;
-  console.log("-----", src);
   import(src).then(inst => {
     iCodeInstCache(iCode.insts, module, version, inst.default);
   });
