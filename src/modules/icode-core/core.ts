@@ -15,7 +15,7 @@ export function iCodeImport0(base: string, module: string, version: string) {
   scElem.type = "module";
   scElem.innerHTML = `
   import inst from "${src}"; 
-  iCode.iCodeInstCache(iCode,"${module}","${version}",inst);
+  iCode.iCodeInstCache(iCode.insts,"${module}","${version}",inst);
   `;
   scElem.onload = () => {
     head.removeChild(scElem);
