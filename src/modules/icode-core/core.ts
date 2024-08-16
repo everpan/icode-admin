@@ -72,7 +72,7 @@ function Import(path: string, module: string, version: string, cb: any) {
   });
 }
 
-function loadCSS(path: string) {
+export function loadCSS(path: string) {
   let href = `${path}/style.css`;
   let link = document.createElement("link");
   link.rel = "stylesheet";

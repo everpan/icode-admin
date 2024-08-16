@@ -1,10 +1,4 @@
-import {
-  type RouterHistory,
-  type RouteRecordRaw,
-  type RouteComponent,
-  createWebHistory,
-  createWebHashHistory
-} from "vue-router";
+import type { RouteRecordRaw, RouteComponent } from "vue-router";
 import { router } from "./index";
 import { isProxy, toRaw } from "vue";
 import { useTimeoutFn } from "@vueuse/core";
@@ -327,29 +321,6 @@ function addAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
   return arrRoutes;
 }
 
-/** 获取路由历史模式 https://next.router.vuejs.org/zh/guide/essentials/history-mode.html */
-function getHistoryMode(routerHistory): RouterHistory {
-  // len为1 代表只有历史模式 为2 代表历史模式中存在base参数 https://next.router.vuejs.org/zh/api/#%E5%8F%82%E6%95%B0-1
-  const historyMode = routerHistory.split(",");
-  const leftMode = historyMode[0];
-  const rightMode = historyMode[1];
-  // no param
-  if (historyMode.length === 1) {
-    if (leftMode === "hash") {
-      return createWebHashHistory("");
-    } else if (leftMode === "h5") {
-      return createWebHistory("");
-    }
-  } //has param
-  else if (historyMode.length === 2) {
-    if (leftMode === "hash") {
-      return createWebHashHistory(rightMode);
-    } else if (leftMode === "h5") {
-      return createWebHistory(rightMode);
-    }
-  }
-}
-
 /** 获取当前页面按钮级别的权限 */
 function getAuths(): Array<string> {
   return router.currentRoute.value.meta.auths as Array<string>;
@@ -397,7 +368,6 @@ export {
   getTopMenu,
   addPathMatch,
   isOneOfArray,
-  getHistoryMode,
   addAsyncRoutes,
   getParentPaths,
   findRouteByPath,

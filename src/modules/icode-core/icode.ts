@@ -5,18 +5,13 @@
 import { createApp } from "vue";
 import App from "../../App.vue";
 import { createPinia } from "pinia";
-import { myCreateRouter } from "@/router/create";
-import { getHistoryMode } from "@/router/utils";
+import { router } from "@/router/create";
 
 const app = createApp(App);
 
 const store = createPinia();
 app.use(store);
 
-const router = myCreateRouter(
-  getHistoryMode(import.meta.env.VITE_ROUTER_HISTORY),
-  []
-);
 const insts: Record<string, any> = {};
 const config: Record<string, any> = {};
 export const iCode = { app, store, router, insts, globalConfig: config };
