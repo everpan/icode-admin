@@ -8,7 +8,7 @@
     "serve": "pnpm dev",
     "build": "rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build",
     "build:staging": "rimraf dist && vite build --mode staging",
-    "build:cdn": "vite -c build/build-module.config.ts build --",
+    "build:cdn": "vite -c build/config/build-module.config.ts build --",
     "report": "rimraf dist && vite build",
     "preview": "vite preview",
     "preview:build": "pnpm build && vite preview",
