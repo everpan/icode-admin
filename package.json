@@ -96,6 +96,7 @@
     "@typescript-eslint/parser": "^7.15.0",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vitejs/plugin-vue-jsx": "^4.0.0",
+    "@vitest/ui": "^2.0.5",
     "autoprefixer": "^10.4.19",
     "boxen": "^7.1.1",
     "cssnano": "^7.0.3",
