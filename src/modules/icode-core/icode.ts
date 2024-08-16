@@ -18,4 +18,5 @@ const router = myCreateRouter(
   []
 );
 const insts: Record<string, any> = {};
-export const iCode = { app, store, router, insts };
+const config: Record<string, any> = {};
+export const iCode = { app, store, router, insts, globalConfig: config };

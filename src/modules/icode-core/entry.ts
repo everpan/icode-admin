@@ -1,4 +1,4 @@
-import { importModule } from "./core";
+import { importModule, loadGlobalConfig } from "./core";
 import { iCode } from "./icode";
 
 export default {
@@ -8,6 +8,7 @@ export default {
   type: "tools",
   iCode: {
     ...iCode,
-    importModule
+    importModule,
+    loadGlobalConfig
   }
 };

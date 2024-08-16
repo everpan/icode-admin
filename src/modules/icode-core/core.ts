@@ -1,4 +1,11 @@
 import { iCode } from "./icode";
+import axios from "axios";
+
+/**
+ * import方法加载es模块
+ * @param base 基地址
+ * @param opt 模块设置
+ */
 
 export function importModule(
   base: string,
@@ -8,6 +15,40 @@ export function importModule(
   Import(path, opt.name, opt.version);
   if (opt.style) {
     loadCSS(path);
+  }
+}
+
+function loadGlobalConfigCallback(config: any) {
+  let modules = config.modules;
+  let coreConfig = config.iCodeCore;
+  if (modules) {
+    modules.forEach(m => {
+      importModule(coreConfig.rootPath, m);
+    });
+  } else {
+    throw "配置中未发现`modules`配置项目";
+  }
+}
+
+export async function loadGlobalConfig(url: string, cb: any) {
+  try {
+    const { data: config } = await axios({
+      method: "get",
+      url
+    });
+    Object.assign(iCode.globalConfig, config);
+    if (cb) {
+      cb(config);
+    } else {
+      try {
+        loadGlobalConfigCallback(config);
+      } catch (e) {
+        throw e;
+      }
+    }
+    return config;
+  } catch {
+    throw `请在public文件夹下添加 ${url} 配置文件`;
   }
 }
 
