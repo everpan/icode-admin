@@ -14,4 +14,12 @@ app.use(store);
 
 const insts: Record<string, any> = {};
 const config: Record<string, any> = {};
-export const iCode = { app, store, router, insts, globalConfig: config };
+const defaultValues: Record<string, any> = {};
+export const iCode = {
+  app,
+  store,
+  router,
+  insts,
+  defaultValues,
+  globalConfig: config
+};

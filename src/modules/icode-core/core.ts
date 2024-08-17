@@ -1,5 +1,6 @@
-import { iCode } from "./icode";
+import { iCode as icode } from "./icode";
 import axios from "axios";
+import type { Router } from "vue-router";
 
 /**
  * import方法加载es模块
@@ -10,7 +11,7 @@ import axios from "axios";
 export function importModule(
   base: string,
   opt: { name: string; version: string; style: boolean | string | null },
-  cb: any
+  cb: any | null = null
 ) {
   let path = genModulePath(base, opt.name, opt.version);
   Import(path, opt.name, opt.version, cb);
@@ -22,14 +23,9 @@ export function importModule(
 function loadGlobalConfigCallback(config: any) {
   let modules = config.modules;
   let coreConfig = config.iCodeCore;
-  let instanceInitCallback = inst => {
-    if (inst.init) {
-      inst.init(iCode.store, iCode.router, inst.config);
-    }
-  };
   if (modules) {
     modules.forEach(module => {
-      importModule(coreConfig.rootPath, module, instanceInitCallback);
+      importModule(coreConfig.rootPath, module);
     });
   } else {
     throw "配置中未发现`modules`配置项目";
@@ -42,7 +38,7 @@ export async function loadGlobalConfig(url: string, cb: any) {
       method: "get",
       url
     });
-    Object.assign(iCode.globalConfig, config);
+    Object.assign(icode.globalConfig, config);
     if (cb) {
       cb(config);
     } else {
@@ -64,10 +60,25 @@ function genModulePath(base: string, module: string, version: string): string {
 
 function Import(path: string, module: string, version: string, cb: any) {
   let src = `${path}/${module}.js`;
-  import(src).then(inst => {
-    instCache(iCode.insts, module, version, inst.default);
+  import(src).then(entryInst => {
+    let inst = entryInst.default;
+    instCacheMV(icode.insts, module, version, inst);
+    if (inst.type === "layout") {
+      icode.defaultValues["layout"] = inst.getLayout();
+    }
+    if (inst.init) {
+      try {
+        inst.init(icode.store, icode.router, inst.config);
+      } catch (e) {
+        console.error(`init ${inst.name}-${inst.version} error: ${e}`);
+      }
+    }
     if (cb) {
-      cb(inst.default);
+      try {
+        cb(inst);
+      } catch (e) {
+        console.error(`callback ${inst.name}-${inst.version} error: ${e}`);
+      }
     }
   });
 }
@@ -98,13 +109,29 @@ export function Import0(base: string, module: string, version: string) {
 }
 */
 
-function instCache(insts: any, module: string, version: string, inst: any) {
-  let verInsts = insts[module];
-  if (typeof verInsts === "undefined") {
-    verInsts = {};
-    verInsts[version] = inst;
-    insts[module] = verInsts;
-  } else {
-    verInsts[version] = inst;
-  }
+// function instCache(insts: any, module: string, version: string, inst: any) {
+//   let verInsts = insts[module];
+//   if (typeof verInsts === "undefined") {
+//     verInsts = {};
+//     verInsts[version] = inst;
+//     insts[module] = verInsts;
+//   } else {
+//     verInsts[version] = inst;
+//   }
+// }
+// 平铺开
+function instCacheMV(insts: any, module: string, version: string, inst: any) {
+  insts[`${module}-${version}`] = inst;
+}
+
+export function registeRoutes(
+  router: Router,
+  routes: Array<RouteConfigsTable>
+) {
+  const layout = icode.defaultValues["layout"];
+  routes.forEach(r => {
+    if (!r.component) {
+      r.component = layout;
+    }
+  });
 }
