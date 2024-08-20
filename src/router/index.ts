@@ -19,18 +19,14 @@ import {
   formatTwoStageRoutes,
   formatFlatteningRoutes
 } from "./utils";
-import {
-  type Router,
-  createRouter,
-  type RouteRecordRaw,
-  type RouteComponent
-} from "vue-router";
+import type { Router, RouteRecordRaw, RouteComponent } from "vue-router";
 import {
   type DataInfo,
   userKey,
   removeToken,
   multipleTabsKey
 } from "@/utils/auth";
+import { myCreateRouter } from "./create";
 
 /** 自动导入全部静态路由，无需再手动引入！匹配 src/router/modules 目录（任何嵌套级别）中具有 .ts 扩展名的所有文件，除了 remaining.ts 文件
  * 如何匹配所有文件请看：https://github.com/mrmlnc/fast-glob#basic-syntax
@@ -66,24 +62,33 @@ export const remainingPaths = Object.keys(remainingRouter).map(v => {
 });
 
 /** 创建路由实例 */
-export const router: Router = createRouter({
-  history: getHistoryMode(import.meta.env.VITE_ROUTER_HISTORY),
-  routes: constantRoutes.concat(...(remainingRouter as any)),
-  strict: true,
-  scrollBehavior(to, from, savedPosition) {
-    return new Promise(resolve => {
-      if (savedPosition) {
-        return savedPosition;
-      } else {
-        if (from.meta.saveSrollTop) {
-          const top: number =
-            document.documentElement.scrollTop || document.body.scrollTop;
-          resolve({ left: 0, top });
-        }
-      }
-    });
-  }
-});
+const constantAllRoutes = constantRoutes.concat(...(remainingRouter as any));
+console.log(constantAllRoutes);
+export const router: Router = myCreateRouter(
+  getHistoryMode(import.meta.env.VITE_ROUTER_HISTORY),
+  constantAllRoutes // [HomeRoutes] as any
+);
+// constantAllRoutes.forEach(r => {
+//   router.addRoute(r);
+// });
+// export const router: Router = createRouter({
+//   history: getHistoryMode(import.meta.env.VITE_ROUTER_HISTORY),
+//   routes: constantRoutes.concat(...(remainingRouter as any)),
+//   strict: true,
+//   scrollBehavior(to, from, savedPosition) {
+//     return new Promise(resolve => {
+//       if (savedPosition) {
+//         return savedPosition;
+//       } else {
+//         if (from.meta.saveSrollTop) {
+//           const top: number =
+//             document.documentElement.scrollTop || document.body.scrollTop;
+//           resolve({ left: 0, top });
+//         }
+//       }
+//     });
+//   }
+// });
 
 /** 重置路由 */
 export function resetRouter() {

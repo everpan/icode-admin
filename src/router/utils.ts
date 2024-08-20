@@ -120,6 +120,7 @@ function getParentPaths(value: string, routes: RouteRecordRaw[], key = "path") {
 
 /** 查找对应 `path` 的路由信息 */
 function findRouteByPath(path: string, routes: RouteRecordRaw[]) {
+  if (!routes) return;
   let res = routes.find((item: { path: string }) => item.path == path);
   if (res) {
     return isProxy(res) ? toRaw(res) : res;
@@ -157,7 +158,9 @@ function handleAsyncRoutes(routeList) {
     formatFlatteningRoutes(addAsyncRoutes(routeList)).map(
       (v: RouteRecordRaw) => {
         // 防止重复添加路由
+        console.log(router.options, "v", v);
         if (
+          router.options.routes.length == 0 ||
           router.options.routes[0].children.findIndex(
             value => value.path === v.path
           ) !== -1
@@ -172,6 +175,9 @@ function handleAsyncRoutes(routeList) {
           const flattenRouters: any = router
             .getRoutes()
             .find(n => n.path === "/");
+          if (!flattenRouters) {
+            console.warn("not fount path:/ router");
+          }
           router.addRoute(flattenRouters);
         }
       }
