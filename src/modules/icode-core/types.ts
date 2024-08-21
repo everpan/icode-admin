@@ -3,5 +3,5 @@ export interface IICode {
   enableGlobal(): void;
   loadGlobalConfig(url: string, cb: any): Promise<void>;
   registeRoutes(router: Router, routes: Array<RouteConfigsTable>): void;
-  import(path: string, module: string, version: string, cb: any): void;
+  importModule(path: string, module: string, version: string, cb: any): void;
 }

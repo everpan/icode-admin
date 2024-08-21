@@ -8,7 +8,6 @@ import { MotionPlugin } from "@vueuse/motion";
 import { createApp, type Directive } from "vue";
 import { useElementPlus } from "@/plugins/elementPlus";
 import { injectResponsiveStorage } from "@/utils/responsive";
-import { iCode } from "../icode-core/icode";
 
 import Table from "@pureadmin/table";
 // import PureDescriptions from "@pureadmin/descriptions";
@@ -61,7 +60,14 @@ export function appMount(rootContainer: string) {
     // .use(PureDescriptions)
     // .use(useEcharts);
     app.mount(rootContainer);
-    iCode.inject(app, router, store);
-    // window.iCode = iCode;
   });
+}
+
+// 导出公共资源
+export function exportResoures() {
+  return {
+    app,
+    router,
+    store
+  };
 }

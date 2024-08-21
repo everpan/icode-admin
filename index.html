@@ -84,10 +84,15 @@
     </div>
     <!-- <script type="module" src="/src/modules/pure-framework/main.ts"></script> -->
     <script type="module">
+      // import fw from "/src/modules/pure-framework/entry.ts";
+      // fw.init();
+      // // import { iCode } from "/src/modules/icode-core/icode.ts";
+      // window.iCode = (await import("/src/modules/icode-core/icode.ts")).iCode;
+      import entry from "/src/modules/icode-core/entry.ts";
       import fw from "/src/modules/pure-framework/entry.ts";
-      fw.init();
-      // import { iCode } from "/src/modules/icode-core/icode.ts";
-      window.iCode = (await import("/src/modules/icode-core/icode.ts")).iCode;
+
+      entry.iCode.inject(fw.exportResoures());
+      await fw.init();
     </script>
   </body>
 </html>
