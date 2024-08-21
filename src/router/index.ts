@@ -63,7 +63,6 @@ export const remainingPaths = Object.keys(remainingRouter).map(v => {
 
 /** 创建路由实例 */
 const constantAllRoutes = constantRoutes.concat(...(remainingRouter as any));
-console.log(constantAllRoutes);
 export const router: Router = myCreateRouter(
   getHistoryMode(import.meta.env.VITE_ROUTER_HISTORY),
   constantAllRoutes // [HomeRoutes] as any

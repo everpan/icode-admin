@@ -2,24 +2,31 @@
  * 以vue3为主的框架
  * 这里创建公用的构件实例
  */
-import { createApp } from "vue";
-import App from "../../App.vue";
-import { createPinia } from "pinia";
-import { router } from "@/router/create";
 
-const app = createApp(App);
-
-const store = createPinia();
-app.use(store);
-
-const insts: Record<string, any> = {};
-const config: Record<string, any> = {};
-const defaultValues: Record<string, any> = {};
-export const iCode = {
-  app,
-  store,
-  router,
-  insts,
-  defaultValues,
-  globalConfig: config
-};
+import type { Component } from "vue";
+import type { Router } from "vue-router";
+import type { Pinia } from "pinia";
+export class ICode {
+  app: Component;
+  store: Pinia;
+  router: Router;
+  insts: Record<string, any>;
+  config: Record<string, any>;
+  defaultValues: Record<string, any>;
+  globalConfig: Record<string, any>;
+  constructor() {
+    this.insts = {};
+    this.config = {};
+    this.defaultValues = {};
+    this.globalConfig = {};
+  }
+  inject(app, router, store) {
+    this.app = app;
+    this.router = router;
+    this.store = store;
+  }
+  enableGlobal() {
+    window.iCode = this;
+  }
+}
+export const iCode = new ICode();

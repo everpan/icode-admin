@@ -10,9 +10,8 @@ export default {
   config: {
     rootContain: "#app"
   },
-  async init(_store, _router, conf: any) {
-    console.log("init", _store, _router, conf);
+  async init(_router, _store, conf: any = this.config) {
+    // 保持调用风格一致，store router在本次实现中，无实际意义
     appMount(conf.rootContain);
-    conf.rootContain = "loaded";
   }
 };

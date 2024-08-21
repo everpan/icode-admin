@@ -1,8 +1,11 @@
+import App from "../../App.vue";
+import { setupStore, store } from "@/store";
+import router from "@/router";
 import { useI18n } from "@/plugins/i18n";
 import { getPlatformConfig } from "@/config";
 import { MotionPlugin } from "@vueuse/motion";
 // import { useEcharts } from "@/plugins/echarts";
-import type { Directive } from "vue";
+import { createApp, type Directive } from "vue";
 import { useElementPlus } from "@/plugins/elementPlus";
 import { injectResponsiveStorage } from "@/utils/responsive";
 import { iCode } from "../icode-core/icode";
@@ -21,8 +24,7 @@ import "element-plus/dist/index.css";
 import "@/assets/iconfont/iconfont.js";
 import "@/assets/iconfont/iconfont.css";
 
-const { app, store, router } = iCode;
-
+const app = createApp(App);
 // 自定义指令
 import * as directives from "@/directives";
 Object.keys(directives).forEach(key => {
@@ -51,7 +53,7 @@ app.use(VueTippy);
 
 export function appMount(rootContainer: string) {
   getPlatformConfig(app).then(async config => {
-    app.use(store);
+    setupStore(app);
     app.use(router);
     await router.isReady();
     injectResponsiveStorage(app, config);
@@ -59,6 +61,7 @@ export function appMount(rootContainer: string) {
     // .use(PureDescriptions)
     // .use(useEcharts);
     app.mount(rootContainer);
+    iCode.inject(app, router, store);
     // window.iCode = iCode;
   });
 }

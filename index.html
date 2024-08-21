@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -82,6 +82,12 @@
       </style>
       <div class="loader"></div>
     </div>
-    <script type="module" src="/src/main.ts"></script>
+    <!-- <script type="module" src="/src/modules/pure-framework/main.ts"></script> -->
+    <script type="module">
+      import fw from "/src/modules/pure-framework/entry.ts";
+      fw.init();
+      // import { iCode } from "/src/modules/icode-core/icode.ts";
+      window.iCode = (await import("/src/modules/icode-core/icode.ts")).iCode;
+    </script>
   </body>
 </html>
