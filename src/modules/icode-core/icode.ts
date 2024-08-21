@@ -44,7 +44,7 @@ export class ICode implements IICode {
     head.appendChild(link);
   }
 
-  inject(app, router, store) {
+  inject({ app, router, store }) {
     this.app = app;
     this.router = router;
     this.store = store;
@@ -54,6 +54,8 @@ export class ICode implements IICode {
   }
   async loadGlobalConfig(url: string, cb: any) {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      const _this = this;
       const { data: config } = await axios({
         method: "get",
         url
@@ -69,14 +71,20 @@ export class ICode implements IICode {
           throw "配置中未发现`moduleBaseURL`配置项目";
         }
         modules.forEach(module => {
-          let path = genModulePath(base, module.name, module.version);
-          this.import(path, module.name, module.version);
+          _this.importModule(base, module.name, module.version, cb);
           if (module.style) {
+            let path = genModulePath(base, module.name, module.version);
             ICode.loadCSS(path);
           }
         });
       }
-      loadGlobalConfigCallback(config);
+      try {
+        loadGlobalConfigCallback(config);
+      } catch (e) {
+        console.error(e);
+        throw e;
+      }
+
       if (cb) {
         cb(config);
       }
@@ -95,7 +103,8 @@ export class ICode implements IICode {
     });
   }
 
-  import(path: string, module: string, version: string, cb: any) {
+  importModule(base: string, module: string, version: string, cb: any) {
+    let path = genModulePath(base, module, version);
     let src = `${path}/${module}.js`;
     import(src).then(entryInst => {
       let inst = entryInst.default;
@@ -120,4 +129,5 @@ export class ICode implements IICode {
     });
   }
 }
+
 export const iCode = new ICode();
