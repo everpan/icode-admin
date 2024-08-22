@@ -1,5 +1,5 @@
 import { appMount } from "./main";
-import { exportResoures } from "./main";
+import { resources } from "./main";
 
 export default {
   name: "pure-framework",
@@ -11,7 +11,9 @@ export default {
   config: {
     rootContain: "#app"
   },
-  exportResoures,
+  extra: {
+    resources
+  },
   async init(_router, _store, conf: any = this.config) {
     // 保持调用风格一致，store router在本次实现中，无实际意义
     appMount(conf.rootContain);

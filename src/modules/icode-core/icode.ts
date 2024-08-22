@@ -44,10 +44,11 @@ export class ICode implements IICode {
     head.appendChild(link);
   }
 
-  inject({ app, router, store }) {
+  inject({ app, router, store, layout }) {
     this.app = app;
     this.router = router;
     this.store = store;
+    this.defaultValues["layout"] = layout;
   }
   enableGlobal() {
     window.iCode = this;
@@ -109,8 +110,12 @@ export class ICode implements IICode {
     import(src).then(entryInst => {
       let inst = entryInst.default;
       instCacheMV(this.instances, module, version, inst);
-      if (inst.type === "layout") {
-        this.defaultValues["layout"] = inst.getLayout();
+      if (inst.type === "framework") {
+        this.inject(inst.extra.resources());
+      } else {
+        if (!this.defaultValues["layout"]) {
+          throw new Error("未发现 framework, 因放置于modules顶部");
+        }
       }
       if (inst.init) {
         try {

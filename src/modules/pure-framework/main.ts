@@ -8,6 +8,7 @@ import { MotionPlugin } from "@vueuse/motion";
 import { createApp, type Directive } from "vue";
 import { useElementPlus } from "@/plugins/elementPlus";
 import { injectResponsiveStorage } from "@/utils/responsive";
+import layout from "@/layout/index.vue";
 
 import Table from "@pureadmin/table";
 // import PureDescriptions from "@pureadmin/descriptions";
@@ -64,10 +65,11 @@ export function appMount(rootContainer: string) {
 }
 
 // 导出公共资源
-export function exportResoures() {
+export function resources() {
   return {
     app,
     router,
-    store
+    store,
+    layout
   };
 }
