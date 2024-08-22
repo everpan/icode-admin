@@ -4,7 +4,7 @@ import { resources } from "./main";
 export default {
   name: "pure-framework",
   version: "0.1.0",
-  describtion: "icode-admin框架,继承自pure admin",
+  description: "icode-admin框架,继承自pure admin",
   routes: [],
   sysRoutes: [],
   type: "framework",

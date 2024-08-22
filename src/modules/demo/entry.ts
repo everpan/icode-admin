@@ -18,7 +18,7 @@ const routes = [
 export default {
   name: "demo",
   version: "0.0.1",
-  describtion: "dem0",
+  description: "dem0",
   routes,
   config: {},
   type: "component",

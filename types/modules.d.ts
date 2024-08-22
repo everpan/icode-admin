@@ -5,7 +5,7 @@ declare global {
   interface EntryInfo {
     name: string;
     version: string;
-    describtion: string;
+    description: string;
     routes?: Array<RouteConfigsTable>;
     sysRoutes?: Array<RouteConfigsTable>;
     config?: Record<string, any>;
