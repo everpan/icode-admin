@@ -57,33 +57,28 @@ export class ICode implements IICode {
     try {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       const _this = this;
-      const { data: config } = await axios({
-        method: "get",
-        url
-      });
+      const { data: config } = await axios({ method: "get", url });
+      let base = config?.icode.rootPath;
+      if (!base) {
+        throw "配置中未发现`icode.rootPath`配置项目";
+      }
+      let modules = config?.modules;
+      if (!modules) {
+        throw "配置中未发现`modules`配置项目";
+      }
+      let fwConf = config.icode.framework;
+      if (!fwConf) {
+        throw "配置中未发现`icode.framework`配置项目";
+      }
       Object.assign(this.globalConfig, config);
-      function loadGlobalConfigCallback(config: any) {
-        let modules = config?.modules;
-        if (!modules) {
-          throw "配置中未发现`modules`配置项目";
-        }
-        let base = config?.icode.rootPath;
-        if (!base) {
-          throw "配置中未发现`icode.rootPath`配置项目";
-        }
+      await _this.importModule(base, fwConf.name, fwConf.version, cb);
+      try {
         modules.forEach(module => {
           _this.importModule(base, module.name, module.version, cb);
         });
-      }
-      try {
-        loadGlobalConfigCallback(config);
       } catch (e) {
         console.error(e);
         throw e;
-      }
-
-      if (cb) {
-        cb(config);
       }
       return config;
     } catch {
@@ -91,46 +86,49 @@ export class ICode implements IICode {
     }
   }
 
-  registeRoutes(router: Router, routes: Array<RouteConfigsTable>) {
+  registeRoutes(routes: Array<RouteConfigsTable>) {
     const layout = this.defaultValues["layout"];
     routes.forEach(r => {
       if (!r.component) {
         r.component = layout;
       }
+      this.router.addRoute(r as any);
     });
   }
 
-  importModule(base: string, module: string, version: string, cb: any) {
+  async importModule(base: string, module: string, version: string, cb: any) {
     let path = genModulePath(base, module, version);
     let src = `${path}/${module}.js`;
-    import(src).then(entryInst => {
-      let inst = entryInst.default as EntryInfo;
-      instCacheMV(this.instances, module, version, inst);
-      if (inst.type === "framework") {
-        this.inject(inst.extra.resources());
-      } else {
-        if (!this.defaultValues["layout"]) {
-          throw new Error("未发现 framework, 因放置于modules顶部");
-        }
+    let entryInst = await import(src);
+    let inst = entryInst.default as EntryInfo;
+    instCacheMV(this.instances, module, version, inst);
+    if (inst.type === "framework") {
+      this.inject(inst.extra.resources());
+    } else {
+      if (!this.defaultValues["layout"]) {
+        throw new Error("未发现 framework, 应放置于modules顶部");
       }
-      if (inst.init) {
-        try {
-          inst.init(this.router, this.store, inst.config);
-        } catch (e) {
-          console.error(`init ${inst.name}-${inst.version} error: ${e}`);
-        }
+    }
+    if (inst.init) {
+      try {
+        inst.init(this.router, this.store, inst.config);
+      } catch (e) {
+        console.error(`init ${inst.name}-${inst.version} error: ${e}`);
       }
-      if (cb) {
-        try {
-          cb(inst);
-        } catch (e) {
-          console.error(`callback ${inst.name}-${inst.version} error: ${e}`);
-        }
+    }
+    if (inst.routes) {
+      this.registeRoutes(inst.routes);
+    }
+    if (cb) {
+      try {
+        cb(inst);
+      } catch (e) {
+        console.error(`callback ${inst.name}-${inst.version} error: ${e}`);
       }
-      if (inst.config?.style) {
-        ICode.loadCSS(path);
-      }
-    });
+    }
+    if (inst.config?.style) {
+      ICode.loadCSS(path);
+    }
   }
 }
 
