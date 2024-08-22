@@ -19,4 +19,4 @@ export default {
     // 保持调用风格一致，store router在本次实现中，无实际意义
     appMount(conf.rootContain);
   }
-};
+} satisfies EntryInfo;

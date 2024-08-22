@@ -4,6 +4,6 @@ export default {
   name: "icode-core",
   version: "0.1.0",
   describtion: "icode core",
-  type: "tools",
-  iCode
-};
+  type: "entry",
+  extra: { iCode }
+} satisfies EntryInfo;

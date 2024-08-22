@@ -104,7 +104,7 @@ export class ICode implements IICode {
     let path = genModulePath(base, module, version);
     let src = `${path}/${module}.js`;
     import(src).then(entryInst => {
-      let inst = entryInst.default;
+      let inst = entryInst.default as EntryInfo;
       instCacheMV(this.instances, module, version, inst);
       if (inst.type === "framework") {
         this.inject(inst.extra.resources());
