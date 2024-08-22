@@ -4,6 +4,6 @@ export default {
   name: "icode-core",
   version: "0.1.0",
   describtion: "icode core",
-  type: "entry",
+  type: "core",
   extra: { iCode }
 } satisfies EntryInfo;

@@ -9,7 +9,7 @@ declare global {
     routes?: Array<RouteConfigsTable>;
     sysRoutes?: Array<RouteConfigsTable>;
     config?: Record<string, any>;
-    type: "entry" | "layout" | "framework";
+    type: "core" | "layout" | "framework" | "component";
     extra?: Record<string, any>;
     init?(
       _router: Router,

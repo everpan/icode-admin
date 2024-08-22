@@ -67,9 +67,9 @@ export class ICode implements IICode {
         if (!modules) {
           throw "配置中未发现`modules`配置项目";
         }
-        let base = config?.moduleBaseURL;
+        let base = config?.icode.rootPath;
         if (!base) {
-          throw "配置中未发现`moduleBaseURL`配置项目";
+          throw "配置中未发现`icode.rootPath`配置项目";
         }
         modules.forEach(module => {
           _this.importModule(base, module.name, module.version, cb);
