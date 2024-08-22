@@ -73,10 +73,6 @@ export class ICode implements IICode {
         }
         modules.forEach(module => {
           _this.importModule(base, module.name, module.version, cb);
-          if (module.style) {
-            let path = genModulePath(base, module.name, module.version);
-            ICode.loadCSS(path);
-          }
         });
       }
       try {
@@ -130,6 +126,9 @@ export class ICode implements IICode {
         } catch (e) {
           console.error(`callback ${inst.name}-${inst.version} error: ${e}`);
         }
+      }
+      if (inst.config?.style) {
+        ICode.loadCSS(path);
       }
     });
   }

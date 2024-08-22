@@ -9,7 +9,8 @@ export default {
   sysRoutes: [],
   type: "framework",
   config: {
-    rootContain: "#app"
+    rootContain: "#app",
+    style: true // 本模块需要加载 style.css
   },
   extra: {
     resources
