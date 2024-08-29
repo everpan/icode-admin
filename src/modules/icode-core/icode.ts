@@ -81,8 +81,8 @@ export class ICode implements IICode {
         throw e;
       }
       return config;
-    } catch {
-      throw `请在public文件夹下添加 ${url} 配置文件`;
+    } catch (e) {
+      throw `请在public文件夹下添加 ${url} 配置文件` + e;
     }
   }
 

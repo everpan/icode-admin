@@ -60,14 +60,28 @@ export const useUserStore = defineStore({
     /** 登入 */
     async loginByUsername(data) {
       return new Promise<UserResult>((resolve, reject) => {
-        getLogin(data)
-          .then(data => {
-            if (data?.success) setToken(data.data);
-            resolve(data);
-          })
-          .catch(error => {
-            reject(error);
-          });
+        resolve({
+          success: true,
+          data: {
+            avatar: "https://avatars.githubusercontent.com/u/44761321",
+            username: "admin",
+            nickname: "小铭",
+            // 一个用户可能有多个角色
+            roles: ["admin"],
+            accessToken: "eyJhbGciOiJIUzUxMiJ9.admin",
+            refreshToken: "eyJhbGciOiJIUzUxMiJ9.adminRefresh",
+            expires: new Date("2030/10/30 00:00:00")
+          }
+        });
+        // return;
+        // getLogin(data)
+        //   .then(data => {
+        //     if (data?.success) setToken(data.data);
+        //     resolve(data);
+        //   })
+        //   .catch(error => {
+        //     reject(error);
+        //   });
       });
     },
     /** 前端登出（不调用接口） */
